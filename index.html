@@ -342,51 +342,12 @@
             </p>
             <button id="startBtn" class="primary">Start tuning</button>
           </div>
-          <!-- High-Precision Cent Arc / Meter -->
-          <div class="w-full max-w-lg my-2 z-10 flex flex-col items-center">
-            <!-- Cent Scale Ruler -->
-            <div
-              class="w-full relative h-10 flex items-center justify-between px-2 text-[11px] font-mono-num text-zinc-500 select-none"
-            >
-              <span class="text-red-400/80">-50</span>
-              <span>-30</span>
-              <span>-15</span>
-              <span class="text-xs font-bold text-[#10b981] scale-110">0</span>
-              <span>+15</span>
-              <span>+30</span>
-              <span class="text-red-400/80">+50</span>
-            </div>
-            <!-- Needle Track Bar -->
-            <div
-              class="w-full relative h-3 bg-[#111216] rounded-full border border-[#272933] overflow-hidden flex items-center p-0.5"
-            >
-              <!-- Center zero marker -->
-              <div
-                class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-[#10b981] -translate-x-1/2 z-0"
-              ></div>
-              <!-- In-tune tolerance zone (±3 cents) -->
-              <div
-                class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-8 bg-[#10b981]/15 border-x border-[#10b981]/30 z-0"
-              ></div>
-              <!-- Dynamic Cent Needle -->
-              <div
-                class="absolute top-0.5 bottom-0.5 w-3 bg-[#10b981] rounded-full shadow-[0_0_8px_#10b981] transition-all duration-150 -translate-x-1/2"
-                id="centNeedle"
-              ></div>
-            </div>
-            <div
-              class="w-full flex justify-between text-[11px] text-zinc-500 font-sans mt-2 px-1"
-            >
-              <span class="flex items-center gap-1"
-                ><span class="text-amber-400">◄</span> Flat (Too Low)</span
-              >
-              <span class="text-zinc-400">Centered = In Tune</span>
-              <span class="flex items-center gap-1"
-                >Sharp (Too High) <span class="text-amber-400">►</span></span
-              >
-            </div>
-          </div>
-          <!-- Frequency Readout Strip (Clean Tabular Numbers) -->
+          <section class="pitch-guide" aria-label="Tuning guide">
+  <div class="guide-labels"><span>Low</span><strong>In tune</strong><span>High</span></div>
+  <div class="guide-track"><div class="guide-range"><span id="centNeedle"></span></div></div>
+</section>
+<details class="pitch-details"><summary>Pitch details</summary>
+<!-- Frequency Readout Strip (Clean Tabular Numbers) -->
           <div
             class="w-full grid grid-cols-3 gap-2 pt-4 border-t border-[#232530] text-center font-mono-num z-10"
           >
@@ -430,7 +391,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </details></div>
         <!-- 3. INTERACTIVE 6-STRING HEADSTOCK / TUNING STRIP (4 Cols) -->
         <div
           class="lg:col-span-4 bg-[#16171d] border border-[#242630] rounded-2xl p-5 flex flex-col justify-between shadow-xl"

@@ -66,9 +66,14 @@ let sampleRate = 0,
 let recent: number[] = [],
   lastReading = 0,
   noisySince = 0;
+let smoothedHz = 0;
+let lastSmoothTime = 0;
+let candidateSince = 0;
 function resetTracking() {
   stable = 0;
   drifting = 0;
+  smoothedHz = 0;
+  lastSmoothTime = 0;
   recent = [];
   candidate = -1;
   count = 0;
@@ -227,14 +232,14 @@ function receive({ freq, rms }: Reading) {
       put("hint", "Move the microphone closer to your guitar.");
       el("intro").hidden = false;
     }
-    if (now - lastReading > 1000) readout();
+    if (now - lastReading > 1000) { smoothedHz = 0; readout(); }
     return;
   }
   el("intro").hidden = true;
   noisySince = 0;
   lastReading = now;
   recent.push(freq);
-  if (recent.length > 3) recent.shift();
+  if (recent.length > 5) recent.shift();
   const sorted = [...recent].sort((a, b) => a - b);
   freq = sorted[Math.floor(sorted.length / 2)];
   const delta = (i: number) => 1200 * Math.log2(freq / hz(i));
@@ -242,17 +247,26 @@ function receive({ freq, rms }: Reading) {
     let nearest = 0;
     for (let i = 1; i < 6; i++)
       if (Math.abs(delta(i)) < Math.abs(delta(nearest))) nearest = i;
-    if (nearest !== candidate) {
-      candidate = nearest;
-      count = 0;
-    }
-    if (++count >= 3 && target !== nearest) {
-      target = nearest;
+    // A different string must win by a meaningful margin across a sustained pluck.
+    if (nearest !== target && Math.abs(delta(nearest)) + 25 < Math.abs(delta(target))) {
       stable = drifting = 0;
+      if (candidate !== nearest || count === 0) {
+        candidate = nearest;
+        candidateSince = now;
+      }
+      count++;
+      if (now - candidateSince < 140) return;
+      target = nearest;
+      smoothedHz = 0;
       controls();
       put("announcement", "Target " + label(target));
     }
+    count = 0;
   }
+  const elapsed = Math.min(100, now - lastSmoothTime);
+  const weight = 1 - Math.exp(-elapsed / 120);
+  smoothedHz = smoothedHz ? smoothedHz * (freq / smoothedHz) ** weight : freq;
+  lastSmoothTime = now;
   if (Math.abs(delta(target)) <= 2) {
     drifting = 0;
     stable ||= now;
@@ -273,7 +287,7 @@ function receive({ freq, rms }: Reading) {
       if (now - drifting >= 2000 && locked.delete(target)) controls();
     } else drifting = 0;
   }
-  readout(freq);
+  readout(smoothedHz);
 }
 async function devices() {
   const list = (await navigator.mediaDevices?.enumerateDevices?.()) || [];
