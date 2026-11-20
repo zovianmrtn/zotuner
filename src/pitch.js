@@ -35,29 +35,66 @@ export function detectPitch(samples, rate) {
     }
   }
   if (!best) return quiet;
-  // Refine the period on the original waveform for sub-cent interpolation.
-  const coarse = best * stride;
-  function error(lag) {
-    let sum = 0;
-    const count = samples.length - coarse - stride - 2;
-    for (let i = 0; i < count; i += stride)
-      sum += (samples[i] - samples[i + lag]) ** 2;
-    return sum;
+  // Compare windows several periods apart. Smoothing suppresses broadband
+  // noise, and a longer phase baseline resolves small tuning differences.
+  const initial = best * stride;
+  const width = Math.max(3, Math.round(initial / 6));
+  const filtered = new Float64Array(samples.length - width + 1);
+  let rolling = 0;
+  for (let i = 0; i < samples.length; i++) {
+    rolling += samples[i];
+    if (i >= width) rolling -= samples[i - width];
+    if (i >= width - 1) filtered[i - width + 1] = rolling;
   }
-  let center = coarse;
-  let min = Infinity;
-  for (let lag = coarse - stride; lag <= coarse + stride; lag++) {
-    const value = error(lag);
-    if (value < min) {
-      center = lag;
-      min = value;
+  function refine(period, cycles) {
+    let lag = period * cycles;
+    for (let iteration = 0; iteration < 4; iteration++) {
+      const whole = Math.floor(lag);
+      const fraction = lag - whole;
+      let cross = 0,
+        curvature = 0;
+      for (let i = 0; i + whole + 1 < filtered.length; i++) {
+        const j = i + whole;
+        const slope = filtered[j + 1] - filtered[j];
+        cross += (filtered[i] - filtered[j] - fraction * slope) * slope;
+        curvature += slope * slope;
+      }
+      const correction = cross / (curvature || 1);
+      lag += correction;
+      if (Math.abs(correction) < 0.002) break;
+    }
+    return lag / cycles;
+  }
+  let period = refine(initial, 1);
+  // A strong overtone can satisfy YIN before the true fundamental. Only
+  // accept a longer period if it explains substantially more signal energy.
+  function mismatch(lag) {
+    const n = Math.floor(lag),
+      mix = lag - n;
+    let residual = 0,
+      energy = 0;
+    for (let i = 0; i + n + 1 < filtered.length; i += stride) {
+      const a = filtered[i];
+      const b = filtered[i + n] + mix * (filtered[i + n + 1] - filtered[i + n]);
+      residual += (a - b) ** 2;
+      energy += a * a + b * b;
+    }
+    return residual / (energy || 1);
+  }
+  const firstError = mismatch(period);
+  if (firstError > 0.008) {
+    for (const multiple of [2, 3]) {
+      const longer = period * multiple;
+      if (longer > rate / 59.5) break;
+      if (mismatch(longer) < firstError * 0.23) {
+        period = refine(longer, 1);
+        break;
+      }
     }
   }
-  const left = error(center - 1),
-    right = error(center + 1);
-  const offset = (left - right) / (2 * (left + right - 2 * min)) || 0;
+  const cycles = Math.max(1, Math.round(filtered.length / (2 * period)));
   return {
-    freq: (sampleRate * stride) / (center + offset),
+    freq: rate / refine(period, cycles),
     confidence: 1 - scores[best],
     rms,
   };

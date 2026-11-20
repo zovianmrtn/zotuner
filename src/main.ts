@@ -119,7 +119,12 @@ function controls() {
         : "○";
     const name =
       "String " + (6 - i) + ", " + label(i) + (locked.has(i) ? ", tuned" : "");
-    row.setAttribute("aria-label", name);
+    row
+      .querySelector("em")!
+      .setAttribute(
+        "aria-label",
+        locked.has(i) ? "Tuned" : chosen ? "Selected" : "Untuned",
+      );
     pegs[i].setAttribute("aria-label", name);
     pressed(row, chosen);
     pressed(pegs[i], chosen);
@@ -188,7 +193,20 @@ function readout(freq = 0) {
   put("detectedFreqDisplay", freq ? freq.toFixed(2) + " Hz" : "—");
   put("diffFreqDisplay", freq ? signed(freq - hz(target), 2) + " Hz" : "—");
 }
+let signalWatch: number | undefined;
 function micUI() {
+  window.clearInterval(signalWatch);
+  if (state === "live") {
+    // Some browsers stop delivering worklet frames when the input becomes silent.
+    signalWatch = window.setInterval(() => {
+      const now = performance.now();
+      if (now >= referenceUntil && now - lastReading > 1000) {
+        stable = drifting = count = smoothedHz = 0;
+        recent = [];
+        readout();
+      }
+    }, 150);
+  }
   const live = state === "live",
     pending = state === "request";
   const action = live
@@ -232,14 +250,17 @@ function receive({ freq, rms }: Reading) {
       put("hint", "Move the microphone closer to your guitar.");
       el("intro").hidden = false;
     }
-    if (now - lastReading > 1000) { smoothedHz = 0; readout(); }
+    if (now - lastReading > 1000) {
+      smoothedHz = 0;
+      readout();
+    }
     return;
   }
   el("intro").hidden = true;
   noisySince = 0;
   lastReading = now;
   recent.push(freq);
-  if (recent.length > 5) recent.shift();
+  if (recent.length > 3) recent.shift();
   const sorted = [...recent].sort((a, b) => a - b);
   freq = sorted[Math.floor(sorted.length / 2)];
   const delta = (i: number) => 1200 * Math.log2(freq / hz(i));
@@ -248,14 +269,19 @@ function receive({ freq, rms }: Reading) {
     for (let i = 1; i < 6; i++)
       if (Math.abs(delta(i)) < Math.abs(delta(nearest))) nearest = i;
     // A different string must win by a meaningful margin across a sustained pluck.
-    if (nearest !== target && Math.abs(delta(nearest)) + 25 < Math.abs(delta(target))) {
+    if (
+      nearest !== target &&
+      Math.abs(delta(nearest)) + 25 < Math.abs(delta(target))
+    ) {
       stable = drifting = 0;
       if (candidate !== nearest || count === 0) {
         candidate = nearest;
         candidateSince = now;
       }
       count++;
-      if (now - candidateSince < 140) return;
+      // Acquire the first reliable note quickly. Keep the longer confirmation
+      // while tracking a sounding string to ignore brief overtone bursts.
+      if (smoothedHz ? now - candidateSince < 140 : count < 2) return;
       target = nearest;
       smoothedHz = 0;
       controls();
@@ -264,7 +290,12 @@ function receive({ freq, rms }: Reading) {
     count = 0;
   }
   const elapsed = Math.min(100, now - lastSmoothTime);
-  const weight = 1 - Math.exp(-elapsed / 120);
+  // Follow deliberate peg turns promptly while damping small fluctuations.
+  const movement = smoothedHz
+    ? Math.abs(1200 * Math.log2(freq / smoothedHz))
+    : 0;
+  const responseMs = movement > 6 ? 14 : 110;
+  const weight = 1 - Math.exp(-elapsed / responseMs);
   smoothedHz = smoothedHz ? smoothedHz * (freq / smoothedHz) ** weight : freq;
   lastSmoothTime = now;
   if (Math.abs(delta(target)) <= 2) {

@@ -1,3 +1,4 @@
+import { windowSize, hopSize } from "./analysis-window.js";
 import processorUrl from "./pitch-worklet.js?worker&url";
 import { detectPitch } from "./pitch.js";
 export type Reading = ReturnType<typeof detectPitch>;
@@ -23,6 +24,7 @@ export class Input {
     const context = new AudioContext({ latencyHint: "interactive" });
     this.context = context;
     await context.resume();
+    if (generation !== this.generation) return;
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         deviceId: device ? { exact: device } : undefined,
@@ -41,7 +43,12 @@ export class Input {
       try {
         await context.audioWorklet.addModule(processorUrl);
         if (generation !== this.generation) return;
-        const worklet = new AudioWorkletNode(context, "guitar-pitch");
+        const worklet = new AudioWorkletNode(context, "guitar-pitch", {
+          processorOptions: {
+            windowSize: windowSize(context.sampleRate),
+            hop: hopSize(context.sampleRate),
+          },
+        });
         worklet.port.onmessage = (event) => {
           if (generation === this.generation) receive(event.data);
         };
@@ -53,13 +60,19 @@ export class Input {
       }
     }
     const analyser = context.createAnalyser();
-    analyser.fftSize = 2048;
+    analyser.fftSize = Math.min(
+      32768,
+      2 ** Math.ceil(Math.log2(windowSize(context.sampleRate))),
+    );
     source.connect(analyser);
     const samples = new Float32Array(analyser.fftSize);
+    const analysisFrame = samples.subarray(
+      samples.length - windowSize(context.sampleRate),
+    );
     const poll = () => {
       if (generation !== this.generation) return;
       analyser.getFloatTimeDomainData(samples);
-      receive(detectPitch(samples, context.sampleRate));
+      receive(detectPitch(analysisFrame, context.sampleRate));
       this.frame = requestAnimationFrame(poll);
     };
     poll();
