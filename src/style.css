@@ -1,3 +1,7 @@
+@import "./pitch-meter.css";
+@import "./strings.css";
+@import "./settings.css";
+
 @font-face {
   font-family: "Inter Variable";
   font-style: normal;
@@ -83,34 +87,6 @@ main .lg\:col-span-8 {
 [hidden] {
   display: none !important;
 }
-#centNeedle {
-  left: 50%;
-  background: #858894;
-  box-shadow: none;
-}
-#centNeedle[data-verdict="tuned"] {
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-}
-#centNeedle[data-verdict="off"] {
-  background: #f59e0b;
-}
-#verdictPill {
-  border-radius: 5px;
-}
-#verdictPill[data-verdict="off"] {
-  color: #fbbf24;
-  background: #33291b;
-  border-color: #654c25;
-}
-#verdictPill[data-verdict="idle"] {
-  color: #c4c5cc;
-  background: #22242b;
-  border-color: #383a43;
-}
-#tuneGlow {
-  opacity: 0;
-}
 #presetPillContainer button {
   background: #202127;
   border: 1px solid #34363f;
@@ -140,111 +116,6 @@ button[data-mode][aria-pressed="true"],
   background: #323540;
   color: white;
 }
-#headstock g.cursor-pointer line {
-  stroke: #454957;
-}
-#headstock g.cursor-pointer circle:last-child {
-  fill: #848895;
-}
-#headstock g.cursor-pointer[aria-pressed="true"] line,
-#headstock g.cursor-pointer[aria-pressed="true"] rect {
-  stroke: var(--green);
-}
-#headstock g.cursor-pointer.done circle:last-child {
-  fill: var(--green);
-}
-.string-row {
-  display: flex;
-  align-items: center;
-  text-align: left;
-  gap: 12px;
-  background: #131419;
-  border: 1px solid #2c2e38;
-  padding: 9px 12px;
-  border-radius: 8px;
-  width: 100%;
-  font-size: 14px;
-}
-.string-row small {
-  display: block;
-  font-size: 12px;
-  color: #a8aab3;
-}
-.string-row b {
-  width: 24px;
-  border-radius: 4px;
-  text-align: center;
-  background: #292b33;
-}
-.string-row em {
-  margin-left: auto;
-  font-style: normal;
-  color: #a9adb7;
-}
-.string-row[aria-pressed="true"] {
-  border-color: #197453;
-  background: #172720;
-}
-.string-row[aria-pressed="true"] b {
-  background: var(--green);
-  color: #0c2019;
-}
-#settings {
-  background: var(--panel);
-  border: 1px solid #444651;
-  border-radius: 8px;
-  color: var(--text);
-  width: min(360px, 92vw);
-  padding: 22px;
-  margin: auto;
-}
-#settings::backdrop {
-  background: #06070bcc;
-}
-#settings form,
-.setting-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-#settings h2 {
-  font-size: 20px;
-  font-weight: 600;
-}
-#settings label {
-  display: grid;
-  gap: 8px;
-  margin: 20px 0 8px;
-  font-size: 14px;
-}
-#settings select,
-#settings input[type="number"] {
-  width: 100%;
-  background: #24262e;
-  padding: 8px;
-  border-radius: 4px;
-}
-input[type="range"] {
-  accent-color: var(--green);
-}
-#deviceSelector {
-  max-width: 170px;
-}
-#centNeedle {
-  transition: left 75ms ease-out;
-}
- .pitch-guide { width:100%; padding-block:12px; }
-.guide-labels {display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:14px;color:#b9bcc6;}
-.guide-labels strong {color:#6ee7b7;}
-.guide-track {position:relative;border:1px solid #41444d;border-radius:10px;background:#111318;padding:0 12px;}
-.guide-range {position:relative;height:64px;background:linear-gradient(90deg,transparent 47.9%,#133b30 48%,#133b30 52%,transparent 52.1%);}
-.guide-range::before {content:"";position:absolute;left:50%;height:100%;width:2px;background:#5bdbab;}
-.guide-range::after {content:"";position:absolute;inset:43% 0;background:repeating-linear-gradient(90deg,#676b75 0 1px,transparent 1px 5%);pointer-events:none;}
-#centNeedle {position:absolute;top:9px;bottom:9px;width:13px;border-radius:8px;transform:translateX(-50%);z-index:1;border:2px solid #eee;transition:left 90ms linear;}
-.pitch-details {width:100%;font-size:13px;color:#b9bcc6;}
-.pitch-details summary {cursor:pointer;text-align:center;padding:10px;}
-#verdictPill {font-size:clamp(13px,2vw,18px);font-weight:650;}
 @media (max-width: 1023px) {
   header .relative.hidden,
   header div:has(> #cal440) {

@@ -1,0 +1,49 @@
+#headstock g.cursor-pointer line {
+  stroke: #454957;
+}
+#headstock g.cursor-pointer circle:last-child {
+  fill: #848895;
+}
+#headstock g.cursor-pointer[aria-pressed="true"] line,
+#headstock g.cursor-pointer[aria-pressed="true"] rect {
+  stroke: var(--green);
+}
+#headstock g.cursor-pointer.done circle:last-child {
+  fill: var(--green);
+}
+.string-row {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 12px;
+  background: #131419;
+  border: 1px solid #2c2e38;
+  padding: 9px 12px;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 14px;
+}
+.string-row small {
+  display: block;
+  font-size: 12px;
+  color: #a8aab3;
+}
+.string-row b {
+  width: 24px;
+  border-radius: 4px;
+  text-align: center;
+  background: #292b33;
+}
+.string-row em {
+  margin-left: auto;
+  font-style: normal;
+  color: #a9adb7;
+}
+.string-row[aria-pressed="true"] {
+  border-color: #197453;
+  background: #172720;
+}
+.string-row[aria-pressed="true"] b {
+  background: var(--green);
+  color: #0c2019;
+}

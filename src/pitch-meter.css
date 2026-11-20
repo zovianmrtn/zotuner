@@ -1,0 +1,105 @@
+#centNeedle {
+  left: 50%;
+  background: #858894;
+  box-shadow: none;
+}
+#centNeedle[data-verdict="tuned"] {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+#centNeedle[data-verdict="off"] {
+  background: #f59e0b;
+}
+#verdictPill {
+  border-radius: 5px;
+}
+#verdictPill[data-verdict="off"] {
+  color: #fbbf24;
+  background: #33291b;
+  border-color: #654c25;
+}
+#verdictPill[data-verdict="idle"] {
+  color: #c4c5cc;
+  background: #22242b;
+  border-color: #383a43;
+}
+#tuneGlow {
+  opacity: 0;
+}
+.pitch-guide {
+  width: 100%;
+  padding-block: 12px;
+}
+.guide-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #b9bcc6;
+}
+.guide-labels strong {
+  color: #6ee7b7;
+}
+.guide-track {
+  position: relative;
+  border: 1px solid #41444d;
+  border-radius: 10px;
+  background: #111318;
+  padding: 0 12px;
+}
+.guide-range {
+  position: relative;
+  height: 64px;
+  background: linear-gradient(
+    90deg,
+    transparent 47.9%,
+    #133b30 48%,
+    #133b30 52%,
+    transparent 52.1%
+  );
+}
+.guide-range::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  width: 2px;
+  background: #5bdbab;
+}
+.guide-range::after {
+  content: "";
+  position: absolute;
+  inset: 43% 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #676b75 0 1px,
+    transparent 1px 5%
+  );
+  pointer-events: none;
+}
+#centNeedle {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  width: 13px;
+  border-radius: 8px;
+  transform: translateX(-50%);
+  z-index: 1;
+  border: 2px solid #eee;
+  transition: left 90ms linear;
+}
+.pitch-details {
+  width: 100%;
+  font-size: 13px;
+  color: #b9bcc6;
+}
+.pitch-details summary {
+  cursor: pointer;
+  text-align: center;
+  padding: 10px;
+}
+#verdictPill {
+  font-size: clamp(13px, 2vw, 18px);
+  font-weight: 650;
+}

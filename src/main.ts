@@ -1,52 +1,10 @@
 import presets from "./tunings.json";
 import { Input, type Reading } from "./audio";
-type Preset = keyof typeof presets;
-type Mode = "auto" | "manual";
-type Prefs = {
-  preset: Preset;
-  mode: Mode;
-  a4: number;
-  device: string;
-  volume: number;
-};
-const prefs: Prefs = {
-  preset: "standard",
-  mode: "auto",
-  a4: 440,
-  device: "",
-  volume: 0.12,
-};
-try {
-  const saved = JSON.parse(localStorage.getItem("zotuner") || "{}");
-  if (Object.hasOwn(presets, saved.preset)) prefs.preset = saved.preset;
-  if (saved.mode === "manual") prefs.mode = "manual";
-  if (saved.a4 >= 410 && saved.a4 <= 480 && typeof saved.a4 === "number")
-    prefs.a4 = saved.a4;
-  if (
-    saved.volume >= 0 &&
-    saved.volume <= 0.4 &&
-    typeof saved.volume === "number"
-  )
-    prefs.volume = saved.volume;
-  if (typeof saved.device === "string") prefs.device = saved.device;
-} catch {
-  /* Private storage is optional. */
-}
-function save() {
-  try {
-    localStorage.setItem("zotuner", JSON.stringify(prefs));
-  } catch {}
-}
-const el = <T extends HTMLElement = HTMLElement>(id: string) =>
-  document.getElementById(id) as T;
-const all = <T extends Element = HTMLElement>(s: string) =>
-  Array.from(document.querySelectorAll<T>(s));
-function put(id: string, value: string) {
-  const node = el(id);
-  if (node.textContent !== value) node.textContent = value;
-}
-const pressed = (node: Element, value: boolean) =>
-  node.setAttribute("aria-pressed", String(value));
+import { prefs, save, type Mode, type Preset } from "./preferences";
+
+import { all, el, pressed, put } from "./dom";
+import { createStringControls } from "./string-controls";
+
 const strings = () => presets[prefs.preset];
 const hz = (index: number) =>
   prefs.a4 * 2 ** ((strings()[index].midi - 69) / 12);
@@ -80,60 +38,10 @@ function resetTracking() {
   lastReading = 0;
   noisySince = 0;
 }
-const pegs = all<SVGGElement>("#headstock g.cursor-pointer");
-const pegLabels = all<SVGTextElement>("#headstock g[font-family] text");
-const stringPaths = all<SVGPathElement>(
-  "#headstock svg > path[stroke-linecap]",
-);
-stringPaths.at(-1)?.remove();
-const rows = strings().map((_, i) => {
-  const button = document.createElement("button");
-  button.className = "string-row";
-  button.innerHTML =
-    "<b></b><span><strong></strong><small></small></span><em></em>";
-  button.onclick = () => selectString(i);
-  el("stringsContainer").append(button);
-  const peg = pegs[i];
-  peg.setAttribute("tabindex", "0");
-  peg.setAttribute("role", "button");
-  peg.onclick = () => selectString(i);
-  peg.onkeydown = (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      selectString(i);
-    }
-  };
-  return button;
-});
+const renderStrings = createStringControls(selectString);
+
 function controls() {
-  strings().forEach((s, i) => {
-    const row = rows[i],
-      chosen = i === target;
-    row.querySelector("b")!.textContent = String(6 - i);
-    row.querySelector("strong")!.textContent = label(i);
-    row.querySelector("small")!.textContent = hz(i).toFixed(2) + " Hz";
-    row.querySelector("em")!.textContent = locked.has(i)
-      ? "✓"
-      : chosen
-        ? "◎"
-        : "○";
-    const name =
-      "String " + (6 - i) + ", " + label(i) + (locked.has(i) ? ", tuned" : "");
-    row
-      .querySelector("em")!
-      .setAttribute(
-        "aria-label",
-        locked.has(i) ? "Tuned" : chosen ? "Selected" : "Untuned",
-      );
-    pegs[i].setAttribute("aria-label", name);
-    pressed(row, chosen);
-    pressed(pegs[i], chosen);
-    pegs[i].classList.toggle("done", locked.has(i));
-    pegLabels[i].textContent = s.note + ["₀", "₁", "₂", "₃", "₄"][s.octave];
-    pegLabels[i].setAttribute("fill", chosen ? "#10b981" : "#b9bdc7");
-    stringPaths[i].removeAttribute("filter");
-    stringPaths[i].setAttribute("stroke", chosen ? "#10b981" : "#9699a4");
-  });
+  renderStrings(strings(), hz, target, locked);
   put("progressCount", locked.size + "/6 Tuned");
   put("targetStringBadge", "String " + (6 - target) + " • " + label(target));
   put("centerNoteLetter", strings()[target].note);

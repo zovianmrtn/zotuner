@@ -1,0 +1,42 @@
+#settings {
+  background: var(--panel);
+  border: 1px solid #444651;
+  border-radius: 8px;
+  color: var(--text);
+  width: min(360px, 92vw);
+  padding: 22px;
+  margin: auto;
+}
+#settings::backdrop {
+  background: #06070bcc;
+}
+#settings form,
+.setting-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+#settings h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+#settings label {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0 8px;
+  font-size: 14px;
+}
+#settings select,
+#settings input[type="number"] {
+  width: 100%;
+  background: #24262e;
+  padding: 8px;
+  border-radius: 4px;
+}
+input[type="range"] {
+  accent-color: var(--green);
+}
+#deviceSelector {
+  max-width: 170px;
+}
