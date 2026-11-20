@@ -1,0 +1,362 @@
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2")
+    format("woff2");
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  color-scheme: dark;
+  --green: #10b981;
+  --text: #e4e4e7;
+  --panel: #18191e;
+}
+body {
+  font-family: "Inter Variable", Inter, system-ui, sans-serif;
+  background: #121316;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.font-mono-num,
+.font-sans,
+#centerNoteLetter {
+  font-family: inherit;
+}
+.text-zinc-500 {
+  color: #a1a1aa;
+}
+.material-symbols-outlined svg {
+  width: 1em;
+  height: 1em;
+}
+button,
+select {
+  touch-action: manipulation;
+}
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #52e1b2;
+  outline-offset: 2px;
+}
+main > div:first-of-type,
+main .lg\:col-span-4,
+main .lg\:col-span-8 {
+  background: var(--panel);
+  border-radius: 8px;
+  box-shadow: none;
+}
+#intro {
+  text-align: center;
+  max-width: 32ch;
+  font-size: 13px;
+  color: #c1c3ca;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+.primary,
+.tool,
+.setting-actions button,
+#settings form button,
+.mobile-fold {
+  padding: 8px 12px;
+  border: 1px solid #393c46;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.primary {
+  background: var(--green);
+  color: #062317;
+  margin-top: 10px;
+  border-color: transparent;
+}
+.mobile-mode,
+.mobile-fold {
+  display: none;
+}
+[hidden] {
+  display: none !important;
+}
+#centNeedle {
+  left: 50%;
+  background: #858894;
+  box-shadow: none;
+}
+#centNeedle[data-verdict="tuned"] {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+#centNeedle[data-verdict="off"] {
+  background: #f59e0b;
+}
+#verdictPill {
+  border-radius: 5px;
+}
+#verdictPill[data-verdict="off"] {
+  color: #fbbf24;
+  background: #33291b;
+  border-color: #654c25;
+}
+#verdictPill[data-verdict="idle"] {
+  color: #c4c5cc;
+  background: #22242b;
+  border-color: #383a43;
+}
+#tuneGlow {
+  opacity: 0;
+}
+#presetPillContainer button {
+  background: #202127;
+  border: 1px solid #34363f;
+  color: #ddd;
+  border-radius: 5px;
+}
+#presetPillContainer button[aria-pressed="true"],
+button[data-mode][aria-pressed="true"],
+#modeAutoBtn[aria-pressed="true"],
+#modeManualBtn[aria-pressed="true"] {
+  background: #19392e;
+  color: #79ecc1;
+  border-color: var(--green);
+}
+#presetPillContainer button[aria-pressed="true"] {
+  background: var(--green);
+  color: #071d16;
+}
+#modeAutoBtn,
+#modeManualBtn,
+#cal440,
+#cal432 {
+  background: transparent;
+}
+#cal440[aria-pressed="true"],
+#cal432[aria-pressed="true"] {
+  background: #323540;
+  color: white;
+}
+#headstock g.cursor-pointer line {
+  stroke: #454957;
+}
+#headstock g.cursor-pointer circle:last-child {
+  fill: #848895;
+}
+#headstock g.cursor-pointer[aria-pressed="true"] line,
+#headstock g.cursor-pointer[aria-pressed="true"] rect {
+  stroke: var(--green);
+}
+#headstock g.cursor-pointer.done circle:last-child {
+  fill: var(--green);
+}
+.string-row {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 12px;
+  background: #131419;
+  border: 1px solid #2c2e38;
+  padding: 9px 12px;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 14px;
+}
+.string-row small {
+  display: block;
+  font-size: 12px;
+  color: #a8aab3;
+}
+.string-row b {
+  width: 24px;
+  border-radius: 4px;
+  text-align: center;
+  background: #292b33;
+}
+.string-row em {
+  margin-left: auto;
+  font-style: normal;
+  color: #a9adb7;
+}
+.string-row[aria-pressed="true"] {
+  border-color: #197453;
+  background: #172720;
+}
+.string-row[aria-pressed="true"] b {
+  background: var(--green);
+  color: #0c2019;
+}
+#settings {
+  background: var(--panel);
+  border: 1px solid #444651;
+  border-radius: 8px;
+  color: var(--text);
+  width: min(360px, 92vw);
+  padding: 22px;
+  margin: auto;
+}
+#settings::backdrop {
+  background: #06070bcc;
+}
+#settings form,
+.setting-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+#settings h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+#settings label {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0 8px;
+  font-size: 14px;
+}
+#settings select,
+#settings input[type="number"] {
+  width: 100%;
+  background: #24262e;
+  padding: 8px;
+  border-radius: 4px;
+}
+input[type="range"] {
+  accent-color: var(--green);
+}
+#deviceSelector {
+  max-width: 170px;
+}
+#centNeedle {
+  transition: left 75ms ease-out;
+}
+#centNeedle:before {
+  content: none;
+}
+#centNeedle + span {
+  pointer-events: none;
+}
+div:has(> #centNeedle) {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #4b4e58 0 1px,
+    transparent 1px 5%
+  );
+}
+div:has(> #centNeedle) > .w-8 {
+  width: 4%;
+}
+@media (max-width: 1023px) {
+  header .relative.hidden,
+  header div:has(> #cal440) {
+    display: none;
+  }
+  main .grid.lg\:grid-cols-12 {
+    gap: 16px;
+  }
+}
+@media (max-width: 767px) {
+  main {
+    display: grid !important;
+    gap: 12px !important;
+    padding-top: 12px !important;
+  }
+  main > .grid {
+    display: contents;
+  }
+  main > .grid > div:first-child {
+    order: 0;
+    min-height: 380px;
+    padding: 16px;
+  }
+  main > div:first-of-type {
+    order: 1;
+  }
+  main > .grid > div:last-child {
+    order: 2;
+  }
+  .mobile-mode {
+    display: flex;
+    gap: 4px;
+    border: 1px solid #32343c;
+    border-radius: 5px;
+    margin-top: 9px;
+  }
+  .mobile-mode button {
+    padding: 4px 10px;
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .mobile-fold {
+    display: block;
+    margin: 8px 0;
+    width: 100%;
+    min-height: 44px;
+  }
+  #headstock:not(.expanded) {
+    display: none;
+  }
+  #presetPillContainer button,
+  #liveMicToggle,
+  #settingsBtn,
+  #playRefToneBtn {
+    min-height: 44px;
+  }
+  #currentTuningNotesDisplay {
+    max-width: 48%;
+    text-align: right;
+  }
+  #detectedFreqDisplay,
+  #targetFreqDisplay,
+  #diffFreqDisplay {
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  header > div,
+  header .flex {
+    gap: 6px;
+  }
+  header p {
+    max-width: 15ch;
+  }
+  #verdictPill {
+    font-size: 11px;
+  }
+  #intro {
+    margin: 4px auto;
+  }
+  #centerNoteLetter {
+    font-size: 64px;
+  }
+  #stringsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .string-row {
+    gap: 7px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  main > div,
+  main > .grid > div {
+    min-width: 0;
+  }
+  #presetPillContainer {
+    max-width: 100%;
+  }
+}

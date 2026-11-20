@@ -1,0 +1,19 @@
+html {
+  color-scheme: dark;
+  background: #121316;
+  color: #e4e4e7;
+  font:
+    16px/1.6 system-ui,
+    sans-serif;
+}
+main {
+  max-width: 40rem;
+  margin: 8vh auto;
+  padding: 1.25rem;
+}
+a {
+  color: #63dfb6;
+}
+h2 {
+  margin-top: 2rem;
+}

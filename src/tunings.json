@@ -1,0 +1,258 @@
+{
+  "standard": [
+    {
+      "note": "E",
+      "octave": 2,
+      "midi": 40
+    },
+    {
+      "note": "A",
+      "octave": 2,
+      "midi": 45
+    },
+    {
+      "note": "D",
+      "octave": 3,
+      "midi": 50
+    },
+    {
+      "note": "G",
+      "octave": 3,
+      "midi": 55
+    },
+    {
+      "note": "B",
+      "octave": 3,
+      "midi": 59
+    },
+    {
+      "note": "E",
+      "octave": 4,
+      "midi": 64
+    }
+  ],
+  "halfstep": [
+    {
+      "note": "E♭",
+      "octave": 2,
+      "midi": 39
+    },
+    {
+      "note": "A♭",
+      "octave": 2,
+      "midi": 44
+    },
+    {
+      "note": "D♭",
+      "octave": 3,
+      "midi": 49
+    },
+    {
+      "note": "G♭",
+      "octave": 3,
+      "midi": 54
+    },
+    {
+      "note": "B♭",
+      "octave": 3,
+      "midi": 58
+    },
+    {
+      "note": "E♭",
+      "octave": 4,
+      "midi": 63
+    }
+  ],
+  "wholestep": [
+    {
+      "note": "D",
+      "octave": 2,
+      "midi": 38
+    },
+    {
+      "note": "G",
+      "octave": 2,
+      "midi": 43
+    },
+    {
+      "note": "C",
+      "octave": 3,
+      "midi": 48
+    },
+    {
+      "note": "F",
+      "octave": 3,
+      "midi": 53
+    },
+    {
+      "note": "A",
+      "octave": 3,
+      "midi": 57
+    },
+    {
+      "note": "D",
+      "octave": 4,
+      "midi": 62
+    }
+  ],
+  "dropd": [
+    {
+      "note": "D",
+      "octave": 2,
+      "midi": 38
+    },
+    {
+      "note": "A",
+      "octave": 2,
+      "midi": 45
+    },
+    {
+      "note": "D",
+      "octave": 3,
+      "midi": 50
+    },
+    {
+      "note": "G",
+      "octave": 3,
+      "midi": 55
+    },
+    {
+      "note": "B",
+      "octave": 3,
+      "midi": 59
+    },
+    {
+      "note": "E",
+      "octave": 4,
+      "midi": 64
+    }
+  ],
+  "dropc": [
+    {
+      "note": "C",
+      "octave": 2,
+      "midi": 36
+    },
+    {
+      "note": "G",
+      "octave": 2,
+      "midi": 43
+    },
+    {
+      "note": "C",
+      "octave": 3,
+      "midi": 48
+    },
+    {
+      "note": "F",
+      "octave": 3,
+      "midi": 53
+    },
+    {
+      "note": "A",
+      "octave": 3,
+      "midi": 57
+    },
+    {
+      "note": "D",
+      "octave": 4,
+      "midi": 62
+    }
+  ],
+  "dadgad": [
+    {
+      "note": "D",
+      "octave": 2,
+      "midi": 38
+    },
+    {
+      "note": "A",
+      "octave": 2,
+      "midi": 45
+    },
+    {
+      "note": "D",
+      "octave": 3,
+      "midi": 50
+    },
+    {
+      "note": "G",
+      "octave": 3,
+      "midi": 55
+    },
+    {
+      "note": "A",
+      "octave": 3,
+      "midi": 57
+    },
+    {
+      "note": "D",
+      "octave": 4,
+      "midi": 62
+    }
+  ],
+  "opend": [
+    {
+      "note": "D",
+      "octave": 2,
+      "midi": 38
+    },
+    {
+      "note": "A",
+      "octave": 2,
+      "midi": 45
+    },
+    {
+      "note": "D",
+      "octave": 3,
+      "midi": 50
+    },
+    {
+      "note": "F♯",
+      "octave": 3,
+      "midi": 54
+    },
+    {
+      "note": "A",
+      "octave": 3,
+      "midi": 57
+    },
+    {
+      "note": "D",
+      "octave": 4,
+      "midi": 62
+    }
+  ],
+  "openg": [
+    {
+      "note": "D",
+      "octave": 2,
+      "midi": 38
+    },
+    {
+      "note": "G",
+      "octave": 2,
+      "midi": 43
+    },
+    {
+      "note": "D",
+      "octave": 3,
+      "midi": 50
+    },
+    {
+      "note": "G",
+      "octave": 3,
+      "midi": 55
+    },
+    {
+      "note": "B",
+      "octave": 3,
+      "midi": 59
+    },
+    {
+      "note": "D",
+      "octave": 4,
+      "midi": 62
+    }
+  ]
+}

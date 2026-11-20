@@ -1,0 +1,31 @@
+{
+  "name": "zotuner",
+  "version": "1.0.0",
+  "description": "Private, real-time six-string guitar tuner",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zovianmrtn/zotuner.git"
+  },
+  "author": "",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/zovianmrtn/zotuner/issues"
+  },
+  "homepage": "https://github.com/zovianmrtn/zotuner#readme",
+  "devDependencies": {
+    "@material-design-icons/svg": "^0.14.15",
+    "autoprefixer": "^10.7.0",
+    "postcss": "^8.5.33",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0"
+  }
+}
